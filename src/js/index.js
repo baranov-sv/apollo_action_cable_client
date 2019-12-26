@@ -7,12 +7,11 @@ import ActionCableLink from 'graphql-ruby-client/subscriptions/ActionCableLink';
 import { setContext } from 'apollo-link-context'
 import gql from 'graphql-tag'
 
-const cable = ActionCable.createConsumer('ws://api.markeaze.test:3001/cable')
+const cable = ActionCable.createConsumer('ws://ws-dev.markeaze.test:3334/cable')
 
 const httpLink = new HttpLink({
-  uri: 'http://api.markeaze.test:3001/api/v1/graphql'
+  uri: 'http://api-dev.markeaze.test:3001/api/v1/graphql'
 });
-
 
 const channelName = "ApplicationCable::GraphqlChannel"
 const connectionParams = {authToken: 'xxx'}
@@ -35,10 +34,13 @@ const client = new ApolloClient({
 });
 
 const subscription = gql `
-  subscription {
-    accountFinished{
-      id
-      domain
+  subscription($id: Int!) {
+    visitorUpdate(id: $id){
+      visitor {
+        id
+        first_name
+      }
+      user_id
     }
   }
 `;
@@ -55,9 +57,9 @@ window.client = client;
 window.subscription = subscription;
 window.query = query;
 
-// client.subscribe({query: subscription, variables: {account_id: 1}}).subscribe({
-//     next(data) {console.error(data);},
-//     error(err) { console.error('err', err); },
+// client.subscribe({query: subscription, variables: {id: 2}}).subscribe({
+//     next(data) {console.log(data);},
+//     error(err) { console.log('err', err); },
 //   });
 
 

@@ -1,0 +1,3 @@
+docker build -t apollo_action_cable .
+
+docker run --rm -it --name apollo_action_cable -p 127.0.0.1:8080:8080 -v ${PWD}:/usr/src/app apollo_action_cable bash
